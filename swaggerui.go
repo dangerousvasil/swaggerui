@@ -9,9 +9,9 @@ import (
 //go:generate go run generate.go
 
 //go:embed embed
-var swagfs embed.FS
+var Swagfs embed.FS
 
-func byteHandler(b []byte) http.HandlerFunc {
+func ByteHandler(b []byte) http.HandlerFunc {
 	return func(w http.ResponseWriter, _ *http.Request) {
 		w.Write(b)
 	}
@@ -20,9 +20,9 @@ func byteHandler(b []byte) http.HandlerFunc {
 // Handler returns a handler that will serve a self-hosted Swagger UI with your spec embedded
 func Handler(spec []byte) http.Handler {
 	// render the index template with the proper spec name inserted
-	static, _ := fs.Sub(swagfs, "embed")
+	static, _ := fs.Sub(Swagfs, "embed")
 	mux := http.NewServeMux()
-	mux.HandleFunc("/swagger_spec", byteHandler(spec))
+	mux.HandleFunc("/swagger_spec", ByteHandler(spec))
 	mux.Handle("/", http.FileServer(http.FS(static)))
 	return mux
 }
